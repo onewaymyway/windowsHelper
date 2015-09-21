@@ -8,34 +8,29 @@ import ctypes
 import winproc
 
 exeDic={}
-
 ISOTIMEFORMAT="%Y-%m-%d %X"
+
 def mLog(msg):
     print(time.strftime(ISOTIMEFORMAT, time.localtime()))
     print(msg)
-def exeInfos():
+    
+def foo(hwnd,mouse):
     global exeDic
-    procList = winproc.getProcList()
-    pList={}
-    for pp in procList:
-        tExe=pp.szExeFile.decode('gbk')
-        if tExe in exeDic:
-            pass;
-        else:
-            exeDic[tExe]=True
-            mLog('add:'+tExe)
+    tExe=win32gui.GetWindowText(hwnd)
+    if tExe in exeDic:
+        pass;
+    else:
+        exeDic[tExe]=True
+        mLog('add:'+tExe)
+
+def exeInfos():
+    win32gui.EnumWindows(foo, 0)
 
 def mainLoop():
     while(1):
         exeInfos();
         time.sleep(0.01)
-    
-    
-    
-
+        
 if __name__ == "__main__":
     print("args:",sys.argv)
     mainLoop();
-
-       
-
